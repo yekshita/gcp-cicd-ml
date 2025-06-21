@@ -1,0 +1,53 @@
+steps:
+  # Pull the Docker image from Docker Hub
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['pull', '${_DOCKER_IMAGE}']
+  
+  # Tag the image for Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['tag', '${_DOCKER_IMAGE}', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA']
+  
+  # Push the image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA']
+  
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA'
+      - '--region'
+      - '${_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '${_PORT}'
+      - '--memory'
+      - '${_MEMORY}'
+      - '--cpu'
+      - '${_CPU}'
+
+# Store images in Google Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA'
+
+# Timeout for the build
+timeout: '1200s'
+
+# Logging configuration
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+# Substitutions for customizable values
+substitutions:
+  _DOCKER_IMAGE: 'your-dockerhub-username/your-image:latest'
+  _SERVICE_NAME: 'dockerhub-app'
+  _REGION: 'us-central1'
+  _PORT: '8080'
+  _MEMORY: '512Mi'
+  _CPU: '1' 
