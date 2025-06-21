@@ -46,7 +46,7 @@ options:
 # Substitutions for customizable values
 substitutions:
   _DOCKER_IMAGE: '03sarath/ml-app:v1'
-  _SERVICE_NAME: 'ml-app'
+  _SERVICE_NAME: 'placement-app'
   _REGION: 'us-central1'
   _PORT: '8080'
   _MEMORY: '512Mi'
