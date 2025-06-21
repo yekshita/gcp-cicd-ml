@@ -45,7 +45,7 @@ options:
 
 # Substitutions for customizable values
 substitutions:
-  _DOCKER_IMAGE: 'your-dockerhub-username/your-image:latest'
+  _DOCKER_IMAGE: '03sarath/ml-app:v1'
   _SERVICE_NAME: 'dockerhub-app'
   _REGION: 'us-central1'
   _PORT: '8080'
